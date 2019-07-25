@@ -1,6 +1,10 @@
 package fi.academy.jpaworld;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +31,8 @@ public class MaailmaController {
 
     @GetMapping("/country/{name}")
     public Iterable<Country> haeMaat(@PathVariable("name") String name) {
+        cr.findByNameContainsIgnoreCase(name);
+
         return cr.findByNameContainsIgnoreCase(name);
     }
 
@@ -71,5 +77,10 @@ public class MaailmaController {
         return cr.findByNameAndOrderByPopulation(name);
     }
 
+    @GetMapping("/maat")
+    public Iterable<Country> haeKaikkiSivuittain(@RequestParam int page, int size) {
+       Pageable p = PageRequest.of(page,size, Sort.Direction.ASC, "population");
+        return cr.findAll(p);
+    }
 
 }

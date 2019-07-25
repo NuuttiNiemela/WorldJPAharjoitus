@@ -1,11 +1,11 @@
 package fi.academy.jpaworld;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.List;
 
 @Entity
-public class Country {
+public class Country implements Serializable {
 
     @Id
     private String code;
@@ -18,6 +18,14 @@ public class Country {
     private String localname;
     private String governmentform;
     private String code2;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "capital")
+    private City capital;
+    @OneToMany(mappedBy = "country")
+    private List<City> cities;
+
+
+
 
 
     public Country() {}
@@ -100,6 +108,22 @@ public class Country {
 
     public void setCode2(String code2) {
         this.code2 = code2;
+    }
+
+    public City getCapital() {
+        return capital;
+    }
+
+    public void setCapital(City capital) {
+        this.capital = capital;
+    }
+
+    public List<City> getCities() {
+        return cities;
+    }
+
+    public void setCities(List<City> cities) {
+        this.cities = cities;
     }
 
     @Override
